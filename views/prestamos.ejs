@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FindZap - Gestión de Préstamos</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="dashboard-container" style="max-width: 1200px;">
+        <!-- Cabecera -->
+        <div class="dashboard-card" style="margin-bottom: 2rem;">
+            <div class="prestamos-header-flex">
+                <div>
+                    <h1 class="dashboard-title">Módulo de Préstamos y Tarjetas 💳</h1>
+                    <p class="dashboard-subtitle">Control de créditos por empresa/tarjeta para <strong><%= userName %></strong></p>
+                </div>
+                <div>
+                    <a href="/dashboard" class="btn-dashboard-outline">Volver al Dashboard</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flujo de Caja General (Todas las Tarjetas) -->
+        <div class="dashboard-card card-general-flow">
+            <h2 style="font-size: 1.2rem; color: var(--cyan-neon); margin-bottom: 1rem;">Flujo de Caja General (Todas las Tarjetas)</h2>
+            <div class="caja-resumen">
+                <div class="caja-item">
+                    <h3>Total Prestado</h3>
+                    <p style="color: var(--magenta-neon);">$<%= general.prestados.toLocaleString() %></p>
+                </div>
+                <div class="caja-item">
+                    <h3>Total Abonado</h3>
+                    <p style="color: #34d399;">$<%= general.abonados.toLocaleString() %></p>
+                </div>
+                <div class="caja-item">
+                    <h3>Total Intereses</h3>
+                    <p style="color: var(--morado-principal);">$<%= general.intereses.toLocaleString() %></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="prestamos-grid">
+            <!-- Columna Izquierda: Gestión de Tarjetas (Empresas de Préstamos) -->
+            <div>
+                <div class="dashboard-card" style="margin-bottom: 1.5rem;">
+                    <h2 style="font-size: 1.2rem; color: var(--morado-principal); margin-bottom: 1rem;">Crear Nueva Tarjeta / Empresa</h2>
+                    <form action="/prestamos/tarjeta" method="POST">
+                        <div class="form-group">
+                            <label for="nombreTarjeta">Nombre de la Tarjeta</label>
+                            <input type="text" id="nombreTarjeta" name="nombreTarjeta" placeholder="Ej. Ruta Centro 1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="descripcion">Descripción / Zona</label>
+                            <input type="text" id="descripcion" name="descripcion" placeholder="Ej. Zona norte de la ciudad">
+                        </div>
+                        <button type="submit" class="btn-primary">Crear Tarjeta</button>
+                    </form>
+                </div>
+
+                <!-- Lista de Tarjetas existentes -->
+                <div class="dashboard-card">
+                    <h2 style="font-size: 1.2rem; color: var(--cyan-neon); margin-bottom: 1rem;">Tus Tarjetas Activas</h2>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <% if (tarjetas.length === 0) { %>
+                            <p style="color: #94a3b8; text-align: center;">No hay tarjetas registradas.</p>
+                        <% } else { %>
+                            <% tarjetas.forEach(t => { %>
+                                <div class="tarjeta-item-box" style="border-color: <%= tarjetaActivaId === t._id.toString() ? 'var(--cyan-neon)' : 'rgba(255,255,255,0.06)' %>;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                        <strong><%= t.nombreTarjeta %></strong>
+                                        <div class="tarjeta-actions">
+                                            <a href="/prestamos?tarjetaId=<%= t._id %>" class="btn-dashboard-outline btn-sm-outline">Ver Clientes</a>
+                                            <form action="/prestamos/tarjeta/eliminar/<%= t._id %>" method="POST" style="display:inline;">
+                                                <button type="submit" class="btn-sm-danger">Eliminar</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <p style="font-size: 0.8rem; color: #94a3b8;"><%= t.descripcion || 'Sin descripción' %> (<%= t.clientes.length %> clientes)</p>
+                                </div>
+                            <% }) %>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Clientes de la Tarjeta Seleccionada y Flujo Específico -->
+            <div>
+                <% if (!tarjetaSeleccionada) { %>
+                    <div class="dashboard-card" style="text-align: center; padding: 3rem;">
+                        <h2 style="color: #94a3b8; font-size: 1.1rem;">Selecciona una tarjeta a la izquierda para ver sus clientes, registrar abonos/préstamos y su flujo de caja.</h2>
+                    </div>
+                <% } else { %>
+                    <!-- Flujo de la Tarjeta Seleccionada -->
+                    <div class="dashboard-card" style="margin-bottom: 1.5rem;">
+                        <h2 style="font-size: 1.2rem; color: var(--morado-principal); margin-bottom: 0.5rem;">Flujo de Tarjeta: <%= tarjetaSeleccionada.nombreTarjeta %></h2>
+                        <div class="caja-resumen" style="margin-top: 1rem;">
+                            <div class="caja-item">
+                               <h3>Prestado</h3>
+                               <p style="color: var(--magenta-neon);">$<%= tarjetaFiltros.prestados.toLocaleString() %></p>
+                            </div>
+                            <div class="caja-item">
+                               <h3>Abonado</h3>
+                               <p style="color: #34d399;">$<%= tarjetaFiltros.abonados.toLocaleString() %></p>
+                            </div>
+                            <div class="caja-item">
+                               <h3>Intereses</h3>
+                               <p style="color: var(--cyan-neon);">$<%= tarjetaFiltros.intereses.toLocaleString() %></p>
+                            </div>
+                        </div>
+
+                        <!-- Filtro por mes y año -->
+                        <form action="/prestamos" method="GET" style="display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap;">
+                            <input type="hidden" name="tarjetaId" value="<%= tarjetaSeleccionada._id %>">
+                            <input type="number" name="mes" placeholder="Mes (1-12)" value="<%= filtroMes %>" style="flex: 1; padding: 0.4rem; background: var(--fondo-principal); color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px;">
+                            <input type="number" name="anio" placeholder="Año (2026)" value="<%= filtroAnio %>" style="flex: 1; padding: 0.4rem; background: var(--fondo-principal); color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px;">
+                            <button type="submit" style="padding: 0.4rem 1rem; background: var(--cyan-neon); border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Filtrar</button>
+                        </form>
+                    </div>
+
+                    <!-- Registrar Cliente en la Tarjeta -->
+                    <div class="dashboard-card" style="margin-bottom: 1.5rem;">
+                        <h2 style="font-size: 1.2rem; color: var(--cyan-neon); margin-bottom: 1rem;">Agregar Cliente a esta Tarjeta</h2>
+                        <form action="/prestamos/tarjeta/<%= tarjetaSeleccionada._id %>/cliente" method="POST">
+                            <div class="form-group">
+                                <label for="nombreCliente">Nombre del Cliente</label>
+                                <input type="text" id="nombreCliente" name="nombreCliente" placeholder="Ej. Ana Gómez" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="telefono">Teléfono (Opcional)</label>
+                                <input type="text" id="telefono" name="telefono" placeholder="3109876543">
+                            </div>
+                            <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, var(--cyan-neon), #0284c7);">Registrar Cliente (Código Auto)</button>
+                        </form>
+                    </div>
+
+                    <!-- Lista de Clientes de la Tarjeta -->
+                    <div class="dashboard-card">
+                        <h2 style="font-size: 1.2rem; color: var(--morado-principal); margin-bottom: 1rem;">Clientes y Movimientos</h2>
+                        <div style="max-height: 500px; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem;">
+                            <% if (tarjetaSeleccionada.clientes.length === 0) { %>
+                                <p style="color: #94a3b8; text-align: center;">No hay clientes en esta tarjeta.</p>
+                            <% } else { %>
+                                <% tarjetaSeleccionada.clientes.forEach(c => { %>
+                                    <div class="cliente-box">
+                                        <div class="cliente-header">
+                                            <div>
+                                                <span class="badge-codigo">#<%= c.codigo %></span>
+                                                <strong style="margin-left: 0.5rem;"><%= c.nombreCliente %></strong>
+                                            </div>
+                                            <form action="/prestamos/tarjeta/<%= tarjetaSeleccionada._id %>/cliente/eliminar/<%= c._id %>" method="POST" style="display:inline;">
+                                                <button type="submit" class="btn-sm-danger">Eliminar Cliente</button>
+                                            </form>
+                                        </div>
+
+                                        <!-- Formulario para agregar Préstamo, Abono o Interés -->
+                                        <form action="/prestamos/tarjeta/<%= tarjetaSeleccionada._id %>/cliente/<%= c._id %>/movimiento" method="POST" class="cliente-form-grid">
+                                            <select name="tipo">
+                                                <option value="abono">Abono (-)</option>
+                                                <option value="prestamo">Préstamo (+)</option>
+                                                <option value="interes">Interés (+)</option>
+                                            </select>
+                                            <input type="number" name="monto" placeholder="Monto ($)" required>
+                                            <input type="text" name="descripcion" placeholder="Descripción" required>
+                                            <button type="submit">Guardar</button>
+                                        </form>
+
+                                        <!-- Historial de movimientos del cliente -->
+                                        <details style="font-size: 0.8rem; color: #94a3b8; margin-top: 0.5rem;">
+                                            <summary style="cursor: pointer; color: var(--cyan-neon);">Ver historial de movimientos (<%= c.movimientos.length %>)</summary>
+                                            <div style="margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.3rem;">
+                                                <% if (c.movimientos.length === 0) { %>
+                                                    <span>Sin movimientos registrados.</span>
+                                                <% } else { %>
+                                                    <% c.movimientos.forEach(m => { %>
+                                                        <div class="movimiento-row">
+                                                            <span><%= new Date(m.fecha).toLocaleDateString() %> - <%= m.descripcion %> (<%= m.tipo.toUpperCase() %>: $<%= m.monto.toLocaleString() %>)</span>
+                                                            <form action="/prestamos/tarjeta/<%= tarjetaSeleccionada._id %>/cliente/<%= c._id %>/movimiento/eliminar/<%= m._id %>" method="POST" style="display:inline;">
+                                                                <button type="submit" style="background:none; border:none; color:var(--magenta-neon); cursor:pointer;">×</button>
+                                                            </form>
+                                                        </div>
+                                                    <% }) %>
+                                                <% } %>
+                                            </div>
+                                        </details>
+                                    </div>
+                                <% }) %>
+                            <% } %>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

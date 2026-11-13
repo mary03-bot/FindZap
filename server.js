@@ -25,6 +25,8 @@ app.use('/', require('./routes/authRoutes'));
 
 app.use('/', require('./routes/tiendaRoutes'));
 
+app.use('/', require('./routes/prestamosRoutes'));
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
