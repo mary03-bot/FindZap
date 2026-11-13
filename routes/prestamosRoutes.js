@@ -9,16 +9,13 @@ const verificarSesion = (req, res, next) => {
     next();
 };
 
-// 1. Vista principal de Préstamos (Listado de Tarjetas, Flujo General y por Tarjeta)
 router.get('/prestamos', verificarSesion, async (req, res) => {
     try {
         const businessId = req.session.businessId;
         const { tarjetaId, mes, anio } = req.query;
 
-        // Obtener todas las tarjetas/empresas de préstamos del negocio actual
         const tarjetas = await PrestamoEmpresa.find({ businessId }).sort({ createdAt: -1 });
 
-        // --- FLUJO GENERAL (Todas las tarjetas juntas) ---
         let generalPrestados = 0;
         let generalAbonados = 0;
         let generalIntereses = 0;
@@ -38,9 +35,8 @@ router.get('/prestamos', verificarSesion, async (req, res) => {
             });
         });
 
-        const generalBalance = generalAbonados - generalPrestados; // O la lógica de cartera activa
+        const generalBalance = generalAbonados - generalPrestados; 
 
-        // --- TARJETA SELECCIONADA ESPECÍFICA (Si el usuario selecciona una) -->
         let tarjetaSeleccionada = null;
         let tarjetaPrestados = 0;
         let tarjetaAbonados = 0;
@@ -80,7 +76,7 @@ router.get('/prestamos', verificarSesion, async (req, res) => {
     }
 });
 
-// 2. Crear nueva Empresa / Tarjeta de Préstamos
+//Crear nueva Empresa / Tarjeta de Préstamos
 router.post('/prestamos/tarjeta', verificarSesion, async (req, res) => {
     try {
         const { nombreTarjeta, descripcion } = req.body;
@@ -101,7 +97,7 @@ router.post('/prestamos/tarjeta', verificarSesion, async (req, res) => {
     }
 });
 
-// 3. Editar Tarjeta de Préstamos
+// Editar Tarjeta de Préstamos
 router.post('/prestamos/tarjeta/editar/:id', verificarSesion, async (req, res) => {
     try {
         const { nombreTarjeta, descripcion } = req.body;
@@ -116,7 +112,7 @@ router.post('/prestamos/tarjeta/editar/:id', verificarSesion, async (req, res) =
     }
 });
 
-// 4. Eliminar Tarjeta de Préstamos
+// Eliminar Tarjeta de Préstamos
 router.post('/prestamos/tarjeta/eliminar/:id', verificarSesion, async (req, res) => {
     try {
         await PrestamoEmpresa.findOneAndDelete({ _id: req.params.id, businessId: req.session.businessId });
@@ -127,7 +123,7 @@ router.post('/prestamos/tarjeta/eliminar/:id', verificarSesion, async (req, res)
     }
 });
 
-// 5. Agregar Cliente a una Tarjeta (Con Código Automático Secuencial)
+// Agregar Cliente a una Tarjeta 
 router.post('/prestamos/tarjeta/:id/cliente', verificarSesion, async (req, res) => {
     try {
         const { nombreCliente, telefono } = req.body;
@@ -137,7 +133,6 @@ router.post('/prestamos/tarjeta/:id/cliente', verificarSesion, async (req, res) 
         const tarjeta = await PrestamoEmpresa.findOne({ _id: tarjetaId, businessId: req.session.businessId });
         if (!tarjeta) return res.redirect('/prestamos');
 
-        // Generar código automático: si hay clientes, toma el código mayor y suma 1, sino empieza en 1
         let nuevoCodigo = 1;
         if (tarjeta.clientes.length > 0) {
             const codigos = tarjeta.clientes.map(c => c.codigo);
@@ -159,7 +154,7 @@ router.post('/prestamos/tarjeta/:id/cliente', verificarSesion, async (req, res) 
     }
 });
 
-// 6. Eliminar Cliente de una Tarjeta
+
 router.post('/prestamos/tarjeta/:tarjetaId/cliente/eliminar/:clienteId', verificarSesion, async (req, res) => {
     try {
         const { tarjetaId, clienteId } = req.params;
@@ -177,7 +172,7 @@ router.post('/prestamos/tarjeta/:tarjetaId/cliente/eliminar/:clienteId', verific
     }
 });
 
-// 7. Agregar Movimiento a Cliente (Préstamo, Abono o Interés)
+// Agregar Movimiento a Cliente
 router.post('/prestamos/tarjeta/:tarjetaId/cliente/:clienteId/movimiento', verificarSesion, async (req, res) => {
     try {
         const { tarjetaId, clienteId } = req.params;
@@ -206,7 +201,7 @@ router.post('/prestamos/tarjeta/:tarjetaId/cliente/:clienteId/movimiento', verif
     }
 });
 
-// 8. Eliminar Movimiento de un Cliente
+//  Eliminar Movimiento de un Cliente
 router.post('/prestamos/tarjeta/:tarjetaId/cliente/:clienteId/movimiento/eliminar/:movId', verificarSesion, async (req, res) => {
     try {
         const { tarjetaId, clienteId, movId } = req.params;

@@ -3,7 +3,6 @@ const router = express.Router();
 const Transaccion = require('../models/Transaccion');
 const ClienteFiado = require('../models/ClienteFiado');
 
-// Middleware para proteger rutas de tienda
 const verificarSesion = (req, res, next) => {
     if (!req.session.loggedin) {
         return res.redirect('/login');
@@ -11,13 +10,13 @@ const verificarSesion = (req, res, next) => {
     next();
 };
 
-// 1. Vista principal de la Tienda (Caja Central, Transacciones y Clientes Fiados)
+// Vista principal de la Tienda 
 router.get('/tienda', verificarSesion, async (req, res) => {
     try {
         const businessId = req.session.businessId;
-        const { mes, anio } = req.query; // Para filtros opcionales
+        const { mes, anio } = req.query;
 
-        // Construir filtro de fechas para la caja central
+        
         let filtroTransacciones = { businessId };
         if (mes && anio) {
             const inicioMes = new Date(anio, mes - 1, 1);
@@ -29,10 +28,8 @@ router.get('/tienda', verificarSesion, async (req, res) => {
             filtroTransacciones.fecha = { $gte: inicioAnio, $lte: finAnio };
         }
 
-        // Obtener transacciones de la empresa actual
         const transacciones = await Transaccion.find(filtroTransacciones).sort({ fecha: -1 });
 
-        // Calcular totales de caja central
         let totalIngresos = 0;
         let totalEgresos = 0;
 
@@ -43,10 +40,9 @@ router.get('/tienda', verificarSesion, async (req, res) => {
 
         const balanceTotal = totalIngresos - totalEgresos;
 
-        // Obtener clientes fiados de la empresa actual
         const clientes = await ClienteFiado.find({ businessId }).sort({ createdAt: -1 });
 
-        // Procesar estado de cuenta de cada cliente (debiendo / no debiendo)
+
         const clientesConSaldo = clientes.map(cliente => {
             let saldoActual = 0;
             cliente.movimientos.forEach(m => {
@@ -81,7 +77,7 @@ router.get('/tienda', verificarSesion, async (req, res) => {
     }
 });
 
-// 2. Registrar Transacción (Venta en efectivo/Nequi/llave o Pago a proveedor)
+// Registrar Transacción 
 router.post('/tienda/transaccion', verificarSesion, async (req, res) => {
     try {
         const { tipo, categoria, monto, descripcion } = req.body;
@@ -107,7 +103,7 @@ router.post('/tienda/transaccion', verificarSesion, async (req, res) => {
     }
 });
 
-// 3. Eliminar Transacción del historial
+// Eliminar Transacción del historial
 router.post('/tienda/transaccion/eliminar/:id', verificarSesion, async (req, res) => {
     try {
         await Transaccion.findOneAndDelete({ _id: req.params.id, businessId: req.session.businessId });
@@ -118,7 +114,7 @@ router.post('/tienda/transaccion/eliminar/:id', verificarSesion, async (req, res
     }
 });
 
-// 4. Registrar Nuevo Cliente Fiado
+// Registrar Nuevo Cliente Fiado
 router.post('/tienda/cliente', verificarSesion, async (req, res) => {
     try {
         const { nombreCliente, telefono } = req.body;
@@ -139,7 +135,7 @@ router.post('/tienda/cliente', verificarSesion, async (req, res) => {
     }
 });
 
-// 5. Agregar Movimiento (Fiado o Abono) a un Cliente
+//  Agregar Movimiento (Fiado o Abono) a un Cliente
 router.post('/tienda/cliente/:id/movimiento', verificarSesion, async (req, res) => {
     try {
         const { tipo, monto, descripcion, fecha } = req.body;
@@ -166,7 +162,7 @@ router.post('/tienda/cliente/:id/movimiento', verificarSesion, async (req, res) 
     }
 });
 
-// 6. Eliminar un movimiento específico del historial del cliente
+//  Eliminar un movimiento específico del historial del cliente
 router.post('/tienda/cliente/:clienteId/movimiento/eliminar/:movId', verificarSesion, async (req, res) => {
     try {
         const { clienteId, movId } = req.params;
