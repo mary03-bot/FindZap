@@ -1,21 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FindZap</title>
+    <title>FindZap - Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <h2>Bienvenido de nuevo</h2>
-    <p>Selecciona el negocio en el que vas a trabajar</p>
-    <div>
-        <div>
-            <h3>Tienda</h3>
-            <p>Administra la contabilidad de la tienda</p>
-        </div>
-        <div>
-            <h3>Prestamos</h3>
-            <p>Administra los prestamos y abonos</p>
+    <div class="dashboard-container">
+        <div class="dashboard-card">
+            <h1 class="dashboard-title">
+                ¡Bienvenido a FindZap, <%= userName %>! 🚀
+            </h1>
+            <p class="dashboard-subtitle">Panel de control y gestión multitenant de tu inventario y préstamos.</p>
+            
+            <div class="dashboard-meta">
+                Business ID Activo: <code><%= businessId %></code>
+            </div>
+            
+            <div class="dashboard-actions">
+                <a href="/tienda" class="btn-dashboard-solid">Ver Tienda / Inventario</a>
+                <a href="/prestamos" class="btn-dashboard-outline">Gestionar Préstamos</a>
+            </div>
         </div>
     </div>
 </body>

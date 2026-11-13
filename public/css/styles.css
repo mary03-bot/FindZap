@@ -120,3 +120,149 @@ body {
 .auth-link:hover span {
     text-decoration: underline;
 }
+/* --- Estilos del Dashboard --- */
+.dashboard-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.dashboard-card {
+    background-color: var(--fondo-tarjetas);
+    padding: 2.5rem;
+    border-radius: 16px;
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(168, 85, 247, 0.15);
+}
+
+.dashboard-title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(90deg, var(--morado-principal), var(--cyan-neon));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.dashboard-subtitle {
+    color: #cbd5e1;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.dashboard-meta {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    background-color: var(--fondo-principal);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    display: inline-block;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dashboard-meta code {
+    color: var(--cyan-neon);
+}
+
+.dashboard-actions {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-dashboard-solid {
+    padding: 0.8rem 1.5rem;
+    background: linear-gradient(135deg, var(--morado-principal), #7e22ce);
+    color: var(--texto-principal);
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+}
+
+.btn-dashboard-solid:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, var(--morado-principal), var(--cyan-neon));
+}
+
+.btn-dashboard-outline {
+    padding: 0.8rem 1.5rem;
+    background: transparent;
+    border: 1px solid var(--cyan-neon);
+    color: var(--cyan-neon);
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-dashboard-outline:hover {
+    background-color: rgba(6, 182, 212, 0.1);
+    transform: translateY(-2px);
+}
+
+/* --- Estilos del Módulo Tienda --- */
+.tienda-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.caja-resumen {
+    display: flex;
+    justify-content: space-between;
+    background: var(--fondo-principal);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 1.5rem;
+}
+
+.caja-item h3 {
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+.caja-item p {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--cyan-neon);
+}
+
+.badge-debiendo {
+    background-color: rgba(244, 63, 94, 0.15);
+    color: var(--magenta-neon);
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge-nodebiendo {
+    background-color: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+th {
+    color: var(--morado-principal);
+}

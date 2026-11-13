@@ -107,12 +107,18 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Ruta temporal de Dashboard para verificar que el login funciona
+// Ruta del Dashboard principal protegida por sesión
 router.get('/dashboard', (req, res) => {
+    // Si no ha iniciado sesión, lo mandamos al login por seguridad
     if (!req.session.loggedin) {
         return res.redirect('/login');
     }
-    res.send(`¡Bienvenido al panel de FindZap, ${req.session.userName}! Tu Business ID es: ${req.session.businessId}`);
+
+    
+    res.render('dashboard', { 
+        userName: req.session.userName,
+        businessId: req.session.businessId 
+    });
 });
 
 module.exports = router;
