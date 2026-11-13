@@ -4,9 +4,9 @@ const Usuario = require('../models/Usuario');
 const Empresa = require('../models/Empresa');
 const bcryptjs = require('bcryptjs');
 
-// Redirigir la raíz al login
+// --- RUTA PRINCIPAL (LANDING PAGE) ---
 router.get('/', (req, res) => {
-    res.redirect('/login');
+    res.render('landing');
 });
 
 // Vista de Login
@@ -85,7 +85,6 @@ router.post('/login', async (req, res) => {
             return res.render('login', { alerta: "Correo o contraseña incorrectos." });
         }
 
-        // Comparar la contraseña ingresada con el hash guardado
         const passwordCorrecto = await bcryptjs.compare(password, usuario.password);
 
         if (!passwordCorrecto) {
@@ -107,9 +106,8 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Ruta del Dashboard principal protegida por sesión
+// Ruta del Dashboard principal 
 router.get('/dashboard', (req, res) => {
-    // Si no ha iniciado sesión, lo mandamos al login por seguridad
     if (!req.session.loggedin) {
         return res.redirect('/login');
     }
@@ -120,5 +118,7 @@ router.get('/dashboard', (req, res) => {
         businessId: req.session.businessId 
     });
 });
+
+
 
 module.exports = router;

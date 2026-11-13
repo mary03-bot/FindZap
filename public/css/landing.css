@@ -1,0 +1,478 @@
+/* ==========================================================================
+   LANDING PAGE - FindZap (autónomo)
+   No necesita clase en el body ni otros estilos base.
+   ========================================================================== */
+
+/* Paleta (si ya la tienes en tu CSS, no pasa nada por repetirla) */
+:root {
+    --bg-dark: #0f0a1c;
+    --card-bg: rgba(23, 15, 38, 0.85);
+    --border-color: #3b2260;
+    --primary-purple: #8b5cf6;
+    --primary-hover: #7c3aed;
+    --purple-glow: rgba(139, 92, 246, 0.3);
+    --text-main: #f3f4f6;
+    --text-muted: #a1a1aa;
+    --input-bg: #181028;
+    --error-color: #ef4444;
+}
+
+/* ----- Base mínima ----- */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.5;
+}
+
+/* Reset limitado a los elementos de la landing (especificidad baja
+   para que las clases de abajo siempre lo sobrescriban) */
+nav,
+nav *,
+section,
+section *,
+footer,
+footer * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+section,
+footer {
+    scroll-margin-top: 70px;
+}
+
+/* ----- Navbar ----- */
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    background-color: var(--bg-dark);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.logo h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--primary-purple);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+}
+
+.nav-links a {
+    display: block;
+    padding: 0.5rem 0.9rem;
+    border-radius: 8px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: var(--text-main);
+    background-color: var(--input-bg);
+}
+
+.nav-links li:last-child a {
+    background-color: var(--primary-purple);
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+.nav-links li:last-child a:hover {
+    background-color: var(--primary-hover);
+}
+
+/* ----- Hero ----- */
+.hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 85vh;
+    padding: 4rem 2rem;
+    background-color: var(--bg-dark);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.hero-text {
+    width: 100%;
+    max-width: 900px;
+}
+
+.hero-text h1 {
+    font-size: 3rem;
+    line-height: 1.2;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    color: var(--text-main);
+}
+
+.hero-text h1 span {
+    display: block;
+    color: var(--primary-purple);
+}
+
+.hero-text h3 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 1.6;
+    margin-bottom: 1.2rem;
+    color: var(--text-main);
+}
+
+.hero-text p {
+    max-width: 760px;
+    margin: 0 auto;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+}
+
+.hero .btn {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2.5rem;
+}
+
+.hero .btn-primary,
+.hero .btn-secondary {
+    padding: 0.9rem 1.8rem;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.hero .btn-primary {
+    background-color: var(--primary-purple);
+    border: 1px solid var(--primary-purple);
+    color: var(--text-main);
+    box-shadow: 0 4px 15px var(--purple-glow);
+}
+
+.hero .btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+.hero .btn-secondary {
+    background-color: transparent;
+    border: 1px solid var(--primary-purple);
+    color: var(--primary-purple);
+}
+
+.hero .btn-secondary:hover {
+    background-color: var(--purple-glow);
+    color: var(--text-main);
+    transform: translateY(-2px);
+}
+
+/* ----- Secciones ----- */
+#tienda,
+#prestamos,
+#beneficios {
+    padding: 5rem 2rem;
+}
+
+#tienda,
+#beneficios {
+    background-color: var(--bg-dark);
+}
+
+#prestamos {
+    background-color: var(--input-bg);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.contenedor {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.caja {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px var(--bg-dark);
+}
+
+.contenedor .text h2 {
+    font-size: 1.8rem;
+    line-height: 1.3;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+    color: var(--text-main);
+}
+
+.contenedor .text h2::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 4px;
+    margin-top: 0.8rem;
+    border-radius: 2px;
+    background-color: var(--primary-purple);
+}
+
+.contenedor .text p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+}
+
+.list ul {
+    list-style: none;
+}
+
+.list li {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+}
+
+.list li:first-child {
+    padding-top: 0;
+}
+
+.list li:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.list li span {
+    display: block;
+    margin-bottom: 0.2rem;
+    font-weight: 600;
+    color: var(--primary-purple);
+}
+
+/* ----- Beneficios ----- */
+#beneficios > h2 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 3rem;
+    color: var(--text-main);
+}
+
+#beneficios > h2::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 4px;
+    margin: 0.8rem auto 0;
+    border-radius: 2px;
+    background-color: var(--primary-purple);
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.miniCaja {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-top: 4px solid var(--primary-purple);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.miniCaja:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary-purple);
+    box-shadow: 0 8px 24px var(--purple-glow);
+}
+
+.miniCaja h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.7rem;
+    color: var(--text-main);
+}
+
+.miniCaja p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+}
+
+/* ----- Footer ----- */
+#contacto {
+    padding: 4rem 2rem 2rem;
+    background-color: var(--input-bg);
+    border-top: 1px solid var(--border-color);
+}
+
+#contacto .contenedor {
+    grid-template-columns: 2fr 1fr;
+}
+
+#contacto .caja {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+#contacto h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    color: var(--primary-purple);
+}
+
+#contacto p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+}
+
+.list-2 a {
+    display: inline-block;
+    padding: 0.3rem 0;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+}
+
+.list-2 a:hover {
+    color: var(--primary-purple);
+}
+
+#contacto .ultimo {
+    max-width: 1100px;
+    margin: 3rem auto 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media (max-width: 968px) {
+    .contenedor,
+    #contacto .contenedor {
+        grid-template-columns: 1fr;
+    }
+
+    .container {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .hero-text h1 {
+        font-size: 2.4rem;
+    }
+
+    #tienda,
+    #prestamos,
+    #beneficios {
+        padding: 3.5rem 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        position: static;
+        flex-direction: column;
+        padding: 1rem;
+    }
+
+    .nav-links {
+        justify-content: center;
+    }
+
+    section,
+    footer {
+        scroll-margin-top: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .hero {
+        min-height: auto;
+        padding: 3rem 1rem;
+    }
+
+    .hero-text h1 {
+        font-size: 1.9rem;
+    }
+
+    .hero-text h3 {
+        font-size: 1.05rem;
+    }
+
+    .hero .btn {
+        flex-direction: column;
+    }
+
+    .hero .btn-primary,
+    .hero .btn-secondary {
+        width: 100%;
+    }
+
+    #tienda,
+    #prestamos,
+    #beneficios {
+        padding: 2.5rem 1rem;
+    }
+
+    .caja {
+        padding: 1.5rem;
+    }
+
+    .contenedor .text h2,
+    #beneficios > h2 {
+        font-size: 1.5rem;
+    }
+
+    .container {
+        grid-template-columns: 1fr;
+    }
+
+    #contacto {
+        padding: 3rem 1rem 1.5rem;
+    }
+}
